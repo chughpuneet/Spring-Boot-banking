@@ -9,10 +9,10 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>com.banking</groupId>
-    <artifactId>configurations</artifactId>
+    <artifactId>configserver</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>configurations</name>
-    <description>Demo project for Spring Boot</description>
+    <name>configserver</name>
+    <description>Config Server for Spring Boot</description>
     <properties>
         <java.version>1.8</java.version>
         <spring-cloud.version>2021.0.3</spring-cloud.version>
