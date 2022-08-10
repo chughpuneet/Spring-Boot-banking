@@ -1,0 +1,13 @@
+docker build -t chughpuneet/loans:1.0 -f Dockerfile_moveTarget ../loans --build-arg artifact=loans-0.0.1-SNAPSHOT.jar
+docker build -t chughpuneet/accounts:1.0 -f Dockerfile_moveTarget ../accounts --build-arg artifact=accounts-0.0.1-SNAPSHOT.jar
+docker build -t chughpuneet/cards:1.0 -f Dockerfile_moveTarget ../cards --build-arg artifact=cards-0.0.1-SNAPSHOT.jar
+docker build -t chughpuneet/configurations:1.0 -f Dockerfile_moveTarget ../configurations --build-arg artifact=configurations-0.0.1-SNAPSHOT.jar
+
+
+docker run chughpuneet/accounts:1.0
+
+
+docker push chughpuneet/loans:1.0
+docker push chughpuneet/accounts:1.0
+docker push chughpuneet/cards:1.0
+docker push chughpuneet/configurations:1.0

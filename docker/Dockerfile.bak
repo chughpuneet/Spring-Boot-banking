@@ -1,0 +1,23 @@
+# syntax=docker/dockerfile:1
+
+#base image
+FROM openjdk:11-slim as build
+
+ARG WORKING_DIR
+ENV WORKING_DIR=${WORKING_DIR}
+
+#workdir 
+WORKDIR C:\\learning\\springboot\\banking\\cards
+WORKDIR ${WORKING_DIR}
+
+RUN pwd
+
+
+COPY .mvn/ .mvn
+COPY mvnw pom.xml ./
+
+RUN ./mvnw dependency:go-offline
+
+COPY src ./src
+
+CMD ["./mvnw", "spring-boot:run"]

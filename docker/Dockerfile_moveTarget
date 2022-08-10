@@ -1,0 +1,12 @@
+# syntax=docker/dockerfile:1
+
+#base image
+FROM openjdk:11-slim as build
+
+ARG artifact
+#ENV artifact=${artifact}
+
+COPY target/${artifact} app.jar
+
+ENTRYPOINT ["java","-jar","/app.jar"]
+#CMD ["./mvnw", "spring-boot:run"]
