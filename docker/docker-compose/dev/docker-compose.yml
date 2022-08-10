@@ -3,7 +3,7 @@ version: "3.8"
 services:
 
   configserver:
-    image: chughpuneet/configurations:1.0
+    image: chughpuneet/configurations_server:1.0
     mem_limit: 700m
     ports:
       - "8093:8093"

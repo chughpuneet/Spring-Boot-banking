@@ -2,68 +2,70 @@ version: "3.8"
 
 services:
 
-  configurations:
-    image: chughpuneet/configurations:1.0
+  configserver:
+    image: chughpuneet/configurations_server:1.0
     mem_limit: 700m
     ports:
-      - "8083:8093"
+      - "8093:8093"
     networks:
-      - banking-network
+      - banking
 
   accounts:
     image: chughpuneet/accounts:1.0
     mem_limit: 700m
     ports:
-      - "8080:8090"
+      - "8090:8090"
     networks:
-      - banking-network
+      - banking
     depends_on:
       - configserver
     deploy:
       restart_policy:
         condition: on-failure
-        delay: 30s
-        max_attempts: 3
+        delay: 5s
+        max_attempts: 5
         window: 120s
     environment:
-        SPRING_PROFILES_ACTIVE: default
-        SPRING_CONFIG_IMPORT: configserver:http://configserver:8083/
+      SPRING_PROFILES_ACTIVE: default
+      SPRING_CONFIG_IMPORT: configserver:http://configserver:8093/
 
   loans:
     image: chughpuneet/loans:1.0
     mem_limit: 700m
     ports:
-      - "8081:8091"
+      - "8091:8091"
     networks:
-      - banking-network
+      - banking
+    depends_on:
+      - configserver
     deploy:
       restart_policy:
         condition: on-failure
-        delay: 30s
-        max_attempts: 3
+        delay: 5s
+        max_attempts: 5
         window: 120s
     environment:
       SPRING_PROFILES_ACTIVE: default
-      SPRING_CONFIG_IMPORT: configserver:http://configserver:8083/
-
+      SPRING_CONFIG_IMPORT: configserver:http://configserver:8093/
 
   cards:
     image: chughpuneet/cards:1.0
     mem_limit: 700m
     ports:
-      - "8082:8092"
+      - "8092:8092"
     networks:
-      - banking-network
+      - banking
+    depends_on:
+      - configserver
     deploy:
       restart_policy:
         condition: on-failure
-        delay: 30s
-        max_attempts: 3
+        delay: 5s
+        max_attempts: 5
         window: 120s
     environment:
-        SPRING_PROFILES_ACTIVE: default
-        SPRING_CONFIG_IMPORT: configserver:http://configserver:8083/
-
+      SPRING_PROFILES_ACTIVE: default
+      SPRING_CONFIG_IMPORT: configserver:http://configserver:8093/
 
 networks:
-  banking-network:
+  banking:
