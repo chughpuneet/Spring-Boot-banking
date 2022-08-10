@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/accounts/accounts.iml" filepath="$PROJECT_DIR$/accounts/accounts.iml" />
+      <module fileurl="file://$PROJECT_DIR$/cards/cards.iml" filepath="$PROJECT_DIR$/cards/cards.iml" />
+      <module fileurl="file://$PROJECT_DIR$/configserver_properties/configserver_properties.iml" filepath="$PROJECT_DIR$/configserver_properties/configserver_properties.iml" />
+      <module fileurl="file://$PROJECT_DIR$/configurations_server/configurations_server.iml" filepath="$PROJECT_DIR$/configurations_server/configurations_server.iml" />
+      <module fileurl="file://$PROJECT_DIR$/docker/docker.iml" filepath="$PROJECT_DIR$/docker/docker.iml" />
+      <module fileurl="file://$PROJECT_DIR$/loans/loans.iml" filepath="$PROJECT_DIR$/loans/loans.iml" />
+      <module fileurl="file://$PROJECT_DIR$/registryserver/registryserver.iml" filepath="$PROJECT_DIR$/registryserver/registryserver.iml" />
+    </modules>
+  </component>
+</project>
