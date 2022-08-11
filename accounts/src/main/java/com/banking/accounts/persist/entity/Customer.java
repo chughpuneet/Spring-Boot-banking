@@ -1,4 +1,4 @@
-package com.banking.accounts.persist.model;
+package com.banking.accounts.persist.entity;
 
 import lombok.Getter;
 import lombok.Setter;

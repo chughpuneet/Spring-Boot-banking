@@ -1,6 +1,6 @@
 package com.banking.accounts.repository;
 
-import com.banking.accounts.persist.model.Account;
+import com.banking.accounts.persist.entity.Account;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
