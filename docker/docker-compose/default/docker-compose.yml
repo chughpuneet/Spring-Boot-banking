@@ -10,11 +10,11 @@ services:
     networks:
       - banking
 
-  accounts:
-    image: chughpuneet/accounts:1.0
+  registryserver:
+    image: chughpuneet/registryserver:1.0
     mem_limit: 700m
     ports:
-      - "8090:8090"
+      - "8094:8094"
     networks:
       - banking
     depends_on:
@@ -26,8 +26,29 @@ services:
         max_attempts: 5
         window: 120s
     environment:
+      #SPRING_PROFILES_ACTIVE: default
+      SPRING_CONFIG_IMPORT: configserver:http://configserver:8093/
+
+  accounts:
+    image: chughpuneet/accounts:1.0
+    mem_limit: 700m
+    ports:
+      - "8090:8090"
+    networks:
+      - banking
+    depends_on:
+      - configserver
+      - registryserver
+    deploy:
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        max_attempts: 5
+        window: 120s
+    environment:
       SPRING_PROFILES_ACTIVE: default
       SPRING_CONFIG_IMPORT: configserver:http://configserver:8093/
+      eureka.client.serviceUrl.defaultZone: http://registryserver:8094/eureka/
 
   loans:
     image: chughpuneet/loans:1.0
@@ -38,6 +59,7 @@ services:
       - banking
     depends_on:
       - configserver
+      - registryserver
     deploy:
       restart_policy:
         condition: on-failure
@@ -47,6 +69,7 @@ services:
     environment:
       SPRING_PROFILES_ACTIVE: default
       SPRING_CONFIG_IMPORT: configserver:http://configserver:8093/
+      eureka.client.serviceUrl.defaultZone: http://registryserver:8094/eureka/
 
   cards:
     image: chughpuneet/cards:1.0
@@ -57,6 +80,7 @@ services:
       - banking
     depends_on:
       - configserver
+      - registryserver
     deploy:
       restart_policy:
         condition: on-failure
@@ -66,6 +90,7 @@ services:
     environment:
       SPRING_PROFILES_ACTIVE: default
       SPRING_CONFIG_IMPORT: configserver:http://configserver:8093/
+      eureka.client.serviceUrl.defaultZone: http://registryserver:8094/eureka/
 
 networks:
   banking:

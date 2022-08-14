@@ -10,9 +10,11 @@ import com.banking.accounts.model.Loan;
 import com.banking.accounts.persist.entity.Account;
 import com.banking.accounts.repository.AccountsRepository;
 import com.sun.istack.NotNull;
+import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -44,6 +46,7 @@ public class AccountsController {
     }
 
     @GetMapping("/customer/{customerId}")
+    @CircuitBreaker(name = "getCustomerAccountDetailsCircuitBreaker", fallbackMethod = "getCustomerAccountDetailsFallBack")
     public CustomerDetails getCustomerAccountDetails(@PathVariable("customerId") Integer customerId) {
 
         Account account = accountsRepository.findByCustomerId(customerId);
@@ -54,6 +57,14 @@ public class AccountsController {
 
     }
 
+    private CustomerDetails getCustomerAccountDetailsFallBack(
+            Integer customerId, Throwable t){
+        Account account = accountsRepository.findByCustomerId(customerId);
+       // List<Card> cards = cardsClient.getCardDetailsForCustomer(customerId);
+        List<Loan> loans = loansClient.getCustomerLoans(customerId);
+        return new CustomerDetails(account,null, loans);
+    }
+
     @GetMapping("/config")
     public Properties getConfig(){
         com.banking.accounts.dto.response.Properties properties = new Properties(
@@ -62,5 +73,7 @@ public class AccountsController {
         );
         return properties;
     }
+
+
 
 }
