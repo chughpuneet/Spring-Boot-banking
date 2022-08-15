@@ -24,6 +24,7 @@ public class LoansController {
 
     @GetMapping("/customer/{customerId}")
     public List<Loan> getCustomerLoans(@PathVariable("customerId") int customerId){
+        System.out.println("called Loans");
         return loansRepository.findByCustomerIdOrderByStartDtDesc(customerId);
     }
 

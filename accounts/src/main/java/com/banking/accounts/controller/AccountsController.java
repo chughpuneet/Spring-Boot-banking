@@ -11,6 +11,8 @@ import com.banking.accounts.persist.entity.Account;
 import com.banking.accounts.repository.AccountsRepository;
 import com.sun.istack.NotNull;
 import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
+import io.github.resilience4j.ratelimiter.annotation.RateLimiter;
+import io.github.resilience4j.retry.annotation.Retry;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -46,12 +48,13 @@ public class AccountsController {
     }
 
     @GetMapping("/customer/{customerId}")
-    @CircuitBreaker(name = "getCustomerAccountDetailsCircuitBreaker", fallbackMethod = "getCustomerAccountDetailsFallBack")
+    //@CircuitBreaker(name = "getCustomerAccountDetailsCircuitBreaker", fallbackMethod = "getCustomerAccountDetailsFallBack")
+    @Retry(name = "getCustomerAccountDetailsRetry", fallbackMethod = "getCustomerAccountDetailsFallBack")
     public CustomerDetails getCustomerAccountDetails(@PathVariable("customerId") Integer customerId) {
 
         Account account = accountsRepository.findByCustomerId(customerId);
-        List<Card> cards = cardsClient.getCardDetailsForCustomer(customerId);
         List<Loan> loans = loansClient.getCustomerLoans(customerId);
+        List<Card> cards = cardsClient.getCardDetailsForCustomer(customerId);
 
         return new CustomerDetails(account,cards, loans);
 
@@ -66,6 +69,7 @@ public class AccountsController {
     }
 
     @GetMapping("/config")
+    @RateLimiter(name = "getConfigRateLimiter", fallbackMethod = "getConfigRateLimiterFallBack")
     public Properties getConfig(){
         com.banking.accounts.dto.response.Properties properties = new Properties(
                 config.getMsg(), config.getBuildVersion()
@@ -74,6 +78,11 @@ public class AccountsController {
         return properties;
     }
 
-
+    /*
+    The fallback method for rate limiter gets called only when the thread doesn't go to run state after passing the timeout period
+     */
+    private Properties getConfigRateLimiterFallBack(Throwable t){
+        return new Properties(null, null, null, null);
+    }
 
 }
