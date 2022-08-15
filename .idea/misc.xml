@@ -12,6 +12,8 @@
         <option value="$PROJECT_DIR$/config_server_properties/registryserver/pom.xml" />
         <option value="$PROJECT_DIR$/configurations_server/pom.xml" />
         <option value="$PROJECT_DIR$/registryserver/pom.xml" />
+        <option value="$PROJECT_DIR$/accounts/gatewayserver/pom.xml" />
+        <option value="$PROJECT_DIR$/gatewayserver/pom.xml" />
       </list>
     </option>
   </component>

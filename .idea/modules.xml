@@ -7,6 +7,7 @@
       <module fileurl="file://$PROJECT_DIR$/configserver_properties/configserver_properties.iml" filepath="$PROJECT_DIR$/configserver_properties/configserver_properties.iml" />
       <module fileurl="file://$PROJECT_DIR$/configurations_server/configurations_server.iml" filepath="$PROJECT_DIR$/configurations_server/configurations_server.iml" />
       <module fileurl="file://$PROJECT_DIR$/docker/docker.iml" filepath="$PROJECT_DIR$/docker/docker.iml" />
+      <module fileurl="file://$PROJECT_DIR$/gatewayserver/gatewayserver.iml" filepath="$PROJECT_DIR$/gatewayserver/gatewayserver.iml" />
       <module fileurl="file://$PROJECT_DIR$/loans/loans.iml" filepath="$PROJECT_DIR$/loans/loans.iml" />
       <module fileurl="file://$PROJECT_DIR$/registryserver/registryserver.iml" filepath="$PROJECT_DIR$/registryserver/registryserver.iml" />
     </modules>
