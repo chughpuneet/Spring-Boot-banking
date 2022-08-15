@@ -2,6 +2,11 @@ package com.banking.gatewayserver;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.cloud.gateway.route.RouteLocator;
+import org.springframework.cloud.gateway.route.builder.RouteLocatorBuilder;
+import org.springframework.context.annotation.Bean;
+
+import java.util.Date;
 
 @SpringBootApplication
 public class GatewayserverApplication {
@@ -10,4 +15,23 @@ public class GatewayserverApplication {
         SpringApplication.run(GatewayserverApplication.class, args);
     }
 
+    @Bean
+    public RouteLocator myRoutes(RouteLocatorBuilder builder) {
+        return builder.routes()
+                .route(p -> p
+                        .path("/banking/ACCOUNTS/**")
+                        .filters(f -> f.rewritePath("/banking/ACCOUNTS/(?<segment>.*)","/${segment}")
+                                .addResponseHeader("X-Response-Time",new Date().toString()))
+                        .uri("lb://ACCOUNTS")).
+                        route(p -> p
+                                .path("/banking/LOANS/**")
+                                .filters(f -> f.rewritePath("/banking/LOANS/(?<segment>.*)","/${segment}")
+                                        .addResponseHeader("X-Response-Time",new Date().toString()))
+                                .uri("lb://LOANS")).
+                        route(p -> p
+                                .path("/banking/CARDS/**")
+                                .filters(f -> f.rewritePath("/banking/CARDS/(?<segment>.*)","/${segment}")
+                                        .addResponseHeader("X-Response-Time",new Date().toString()))
+                                .uri("lb://CARDS")).build();
+    }
 }
