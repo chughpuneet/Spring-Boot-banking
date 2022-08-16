@@ -5,10 +5,7 @@ import com.banking.loans.dto.response.Properties;
 import com.banking.loans.persist.model.Loan;
 import com.banking.loans.repository.LoansRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -24,7 +21,7 @@ public class LoansController {
 
     @GetMapping("/customer/{customerId}")
     public List<Loan> getCustomerLoans(@PathVariable("customerId") int customerId){
-        System.out.println("called Loans");
+       // System.out.println("called Loans correlationId " + correlationId);
         return loansRepository.findByCustomerIdOrderByStartDtDesc(customerId);
     }
 

@@ -16,7 +16,6 @@ import io.github.resilience4j.retry.annotation.Retry;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -50,21 +49,22 @@ public class AccountsController {
     @GetMapping("/customer/{customerId}")
     //@CircuitBreaker(name = "getCustomerAccountDetailsCircuitBreaker", fallbackMethod = "getCustomerAccountDetailsFallBack")
     @Retry(name = "getCustomerAccountDetailsRetry", fallbackMethod = "getCustomerAccountDetailsFallBack")
-    public CustomerDetails getCustomerAccountDetails(@PathVariable("customerId") Integer customerId) {
+    public CustomerDetails getCustomerAccountDetails(@RequestHeader("banking-correlation-id") String correlationId, @PathVariable("customerId") Integer customerId) {
 
+        System.out.println("correlationId " + correlationId);
         Account account = accountsRepository.findByCustomerId(customerId);
-        List<Loan> loans = loansClient.getCustomerLoans(customerId);
-        List<Card> cards = cardsClient.getCardDetailsForCustomer(customerId);
+        List<Loan> loans = loansClient.getCustomerLoans(correlationId, customerId);
+        List<Card> cards = cardsClient.getCardDetailsForCustomer(correlationId, customerId);
 
         return new CustomerDetails(account,cards, loans);
 
     }
 
     private CustomerDetails getCustomerAccountDetailsFallBack(
-            Integer customerId, Throwable t){
+            String correlationId, Integer customerId, Throwable t){
         Account account = accountsRepository.findByCustomerId(customerId);
        // List<Card> cards = cardsClient.getCardDetailsForCustomer(customerId);
-        List<Loan> loans = loansClient.getCustomerLoans(customerId);
+        List<Loan> loans = loansClient.getCustomerLoans(correlationId, customerId);
         return new CustomerDetails(account,null, loans);
     }
 
