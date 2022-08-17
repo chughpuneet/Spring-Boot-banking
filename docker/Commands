@@ -10,9 +10,15 @@ docker run chughpuneet/accounts:1.0
 
 docker run -d -p 9411:9411 openzipkin/zipkin
 
+docker run -d -it --rm --name rabbitmq -p 5672:5672 -p 15672:15672 rabbitmq:3-management
+
 docker push chughpuneet/loans:1.0
 docker push chughpuneet/accounts:1.0
 docker push chughpuneet/cards:1.0
 docker push chughpuneet/configurations_server:1.0
 docker push chughpuneet/registryserver:1.0
 docker push chughpuneet/gatewayserver:1.0
+
+Web url
+http://localhost:15672/ - for rabbit mq
+http://localhost:9411/zipkin - for zipkin
