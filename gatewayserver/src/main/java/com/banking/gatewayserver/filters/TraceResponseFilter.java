@@ -24,10 +24,12 @@ public class TraceResponseFilter {
     public GlobalFilter postGlobalFilter() {
         return (exchange, chain) -> {
             return chain.filter(exchange).then(Mono.fromRunnable(() -> {
+                logger.info("filter started");
                 HttpHeaders requestHeaders = exchange.getRequest().getHeaders();
                 String correlationId = traceFilterUtil.getCorrelationId(requestHeaders);
                 logger.debug("Updated the correlation id to the outbound headers. {}", correlationId);
                 exchange.getResponse().getHeaders().add(TraceFilterUtil.CORRELATION_ID, correlationId);
+                logger.info("filter ended");
             }));
         };
     }

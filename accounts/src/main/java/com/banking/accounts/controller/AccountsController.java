@@ -13,6 +13,8 @@ import com.sun.istack.NotNull;
 import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import io.github.resilience4j.ratelimiter.annotation.RateLimiter;
 import io.github.resilience4j.retry.annotation.Retry;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -21,6 +23,8 @@ import java.util.List;
 @RestController
 @RequestMapping("accounts")
 public class AccountsController {
+
+    private Logger logger = LoggerFactory.getLogger("AccountsController");
 
     @Autowired
     private AccountsRepository accountsRepository;
@@ -51,20 +55,24 @@ public class AccountsController {
     @Retry(name = "getCustomerAccountDetailsRetry", fallbackMethod = "getCustomerAccountDetailsFallBack")
     public CustomerDetails getCustomerAccountDetails(@RequestHeader("banking-correlation-id") String correlationId, @PathVariable("customerId") Integer customerId) {
 
-        System.out.println("correlationId " + correlationId);
+        logger.info("getCustomerAccountDetails start");
+        logger.info("correlationId " + correlationId);
+
         Account account = accountsRepository.findByCustomerId(customerId);
         List<Loan> loans = loansClient.getCustomerLoans(correlationId, customerId);
         List<Card> cards = cardsClient.getCardDetailsForCustomer(correlationId, customerId);
-
+        logger.info("getCustomerAccountDetails end");
         return new CustomerDetails(account,cards, loans);
 
     }
 
     private CustomerDetails getCustomerAccountDetailsFallBack(
             String correlationId, Integer customerId, Throwable t){
+        logger.info("getCustomerAccountDetailsFallBack start");
         Account account = accountsRepository.findByCustomerId(customerId);
        // List<Card> cards = cardsClient.getCardDetailsForCustomer(customerId);
         List<Loan> loans = loansClient.getCustomerLoans(correlationId, customerId);
+        logger.info("getCustomerAccountDetailsFallBack end");
         return new CustomerDetails(account,null, loans);
     }
 

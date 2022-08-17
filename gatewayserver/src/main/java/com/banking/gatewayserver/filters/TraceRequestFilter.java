@@ -31,6 +31,7 @@ public class TraceRequestFilter implements GlobalFilter {
     @Override
     public Mono<Void> filter(
             ServerWebExchange exchange, GatewayFilterChain chain) {
+        logger.info("filter started");
         HttpHeaders headers = exchange.getRequest().getHeaders();
 
         String correlationId = traceFilterUtil.getCorrelationId(headers);
@@ -41,6 +42,7 @@ public class TraceRequestFilter implements GlobalFilter {
                             TraceFilterUtil.CORRELATION_ID, correlationId).build())
                     .build();
         }
+        logger.info("filter ended");
         return chain.filter(exchange);
     }
 

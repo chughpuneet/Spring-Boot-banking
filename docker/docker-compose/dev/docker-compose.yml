@@ -29,6 +29,27 @@ services:
       #SPRING_PROFILES_ACTIVE: dev
       SPRING_CONFIG_IMPORT: configserver:http://configserver:8093/
 
+  gatewayserver:
+    image: chughpuneet/gatewayserver:1.0
+    mem_limit: 700m
+    ports:
+      - "8095:8095"
+    networks:
+      - banking
+    depends_on:
+      - configserver
+      - registryserver
+    deploy:
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        max_attempts: 5
+        window: 120s
+    environment:
+      #SPRING_PROFILES_ACTIVE: dev
+      SPRING_CONFIG_IMPORT: configserver:http://configserver:8093/
+      eureka.client.serviceUrl.defaultZone: http://registryserver:8094/eureka/
+
   accounts:
     image: chughpuneet/accounts:1.0
     mem_limit: 700m
